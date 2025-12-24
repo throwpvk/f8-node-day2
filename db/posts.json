@@ -1,0 +1,68 @@
+[
+    {
+        "id": "2",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:01.264Z"
+    },
+    {
+        "id": "3",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:02.882Z"
+    },
+    {
+        "id": "4",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:03.641Z"
+    },
+    {
+        "id": "5",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:04.310Z"
+    },
+    {
+        "id": "6",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:06.982Z"
+    },
+    {
+        "id": "7",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:07.541Z"
+    },
+    {
+        "id": "8",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:08.436Z"
+    },
+    {
+        "id": "9",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:08.804Z"
+    },
+    {
+        "id": "10",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:29.701Z"
+    },
+    {
+        "id": "11",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:30.530Z"
+    },
+    {
+        "id": "12",
+        "title": "Amazing Post Title",
+        "content": "This is an amazing post content created by a professional developer!",
+        "createdAt": "2025-12-24T14:15:47.078Z"
+    }
+]
