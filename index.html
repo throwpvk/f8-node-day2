@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>F8 Node Day 2 - Professional API Testing Suite</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        --dark: #1e293b;
+        --light: #f1f5f9;
+        --border: #e2e8f0;
+        --text: #334155;
+        --text-light: #64748b;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 2rem;
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, var(--dark) 0%, #334155 100%);
+        color: white;
+        padding: 3rem 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -5%;
+        width: 400px;
+        height: 400px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .header h1 i {
+        color: var(--primary);
+        background: white;
+        padding: 0.5rem;
+        border-radius: 12px;
+      }
+
+      .header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+        font-weight: 300;
+      }
+
+      .status-bar {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .content {
+        padding: 2rem;
+        display: grid;
+        gap: 2rem;
+      }
+
+      .section {
+        background: var(--light);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 2px solid var(--border);
+        transition: all 0.3s ease;
+      }
+
+      .section:hover {
+        border-color: var(--primary);
+        box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .section-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-header i {
+        color: var(--primary);
+        font-size: 1.75rem;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .form-group label {
+        font-weight: 500;
+        color: var(--text);
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .form-group label i {
+        color: var(--text-light);
+        font-size: 0.875rem;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: "Inter", monospace;
+      }
+
+      .button-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+        margin-bottom: 20px;
+      }
+
+      button {
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-family: inherit;
+        position: relative;
+        overflow: hidden;
+      }
+
+      button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      button:hover::before {
+        width: 300px;
+        height: 300px;
+      }
+
+      button span {
+        position: relative;
+        z-index: 1;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+        color: white;
+      }
+
+      .btn-warning {
+        background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+        color: white;
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+        color: white;
+      }
+
+      .btn-info {
+        background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%);
+        color: white;
+      }
+
+      .response-section {
+        background: var(--dark);
+        color: white;
+        border-radius: 16px;
+        padding: 2rem;
+        margin-top: 1rem;
+      }
+
+      .response-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .response-header h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      .response-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .icon-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      #response {
+        background: #0f172a;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        font-family: "Monaco", "Courier New", monospace;
+        font-size: 0.875rem;
+        white-space: pre-wrap;
+        max-height: 500px;
+        overflow-y: auto;
+        line-height: 1.6;
+        color: #e2e8f0;
+      }
+
+      #response::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #response::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+      }
+
+      #response::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .spinner {
+        border: 4px solid rgba(99, 102, 241, 0.1);
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 2px solid var(--border);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--primary);
+      }
+
+      .stat-card .number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-card .label {
+        font-size: 0.875rem;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        .header {
+          padding: 2rem 1.5rem;
+        }
+
+        .header h1 {
+          font-size: 1.75rem;
+        }
+
+        .content {
+          padding: 1.5rem;
+        }
+
+        .section {
+          padding: 1.5rem;
+        }
+
+        .button-group {
+          grid-template-columns: 1fr;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .toast {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        display: none;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(400px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .toast.success {
+        border-left: 4px solid var(--success);
+      }
+      .toast.error {
+        border-left: 4px solid var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="header-content">
+          <h1>
+            <i class="fas fa-rocket"></i>
+            F8 Node Day 2 - API Testing Suite
+          </h1>
+          <p>Built with ❤️ by Hẹ Hẹ</p>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-item">
+          <span class="status-indicator"></span>
+          <span>API Server: <strong>http://localhost:3000</strong></span>
+        </div>
+        <div class="status-item">
+          <i class="fas fa-check-circle" style="color: var(--success)"></i>
+          <span>Ready</span>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="number" id="totalRequests">0</div>
+            <div class="label">Total Requests</div>
+          </div>
+          <div class="stat-card">
+            <div class="number" id="successRequests">0</div>
+            <div class="label">Successful</div>
+          </div>
+          <div class="stat-card">
+            <div class="number" id="failedRequests">0</div>
+            <div class="label">Failed</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h2>
+              <i class="fas fa-file-alt"></i>
+              Posts Management
+            </h2>
+          </div>
+
+          <div class="button-group">
+            <button class="btn-primary" onclick="getAllPosts()">
+              <i class="fas fa-list"></i>
+              <span>Get All Posts</span>
+            </button>
+            <button class="btn-info" onclick="getPostById()">
+              <i class="fas fa-search"></i>
+              <span>Get By ID</span>
+            </button>
+            <button class="btn-success" onclick="createPost()">
+              <i class="fas fa-plus-circle"></i>
+              <span>Create Post</span>
+            </button>
+            <button class="btn-warning" onclick="updatePost()">
+              <i class="fas fa-edit"></i>
+              <span>Update Post</span>
+            </button>
+            <button class="btn-danger" onclick="deletePost()">
+              <i class="fas fa-trash-alt"></i>
+              <span>Delete Post</span>
+            </button>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>
+                <i class="fas fa-hashtag"></i>
+                Post ID
+              </label>
+              <input
+                type="text"
+                id="postId"
+                placeholder="Enter Post ID (e.g., 1)"
+                value="1"
+              />
+            </div>
+            <div class="form-group">
+              <label>
+                <i class="fas fa-heading"></i>
+                Title
+              </label>
+              <input
+                type="text"
+                id="postTitle"
+                placeholder="Enter post title"
+                value="Amazing Post Title"
+              />
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1">
+              <label>
+                <i class="fas fa-align-left"></i>
+                Content
+              </label>
+              <textarea id="postContent" placeholder="Enter post content">
+This is an amazing post content created by a professional developer!</textarea
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h2>
+              <i class="fas fa-comments"></i>
+              Comments Management
+            </h2>
+          </div>
+
+          <div class="button-group">
+            <button class="btn-primary" onclick="getAllComments()">
+              <i class="fas fa-list"></i>
+              <span>Get All Comments</span>
+            </button>
+            <button class="btn-info" onclick="getCommentById()">
+              <i class="fas fa-search"></i>
+              <span>Get By ID</span>
+            </button>
+            <button class="btn-success" onclick="createComment()">
+              <i class="fas fa-plus-circle"></i>
+              <span>Create Comment</span>
+            </button>
+            <button class="btn-warning" onclick="updateComment()">
+              <i class="fas fa-edit"></i>
+              <span>Update Comment</span>
+            </button>
+            <button class="btn-danger" onclick="deleteComment()">
+              <i class="fas fa-trash-alt"></i>
+              <span>Delete Comment</span>
+            </button>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>
+                <i class="fas fa-hashtag"></i>
+                Comment ID
+              </label>
+              <input
+                type="text"
+                id="commentId"
+                placeholder="Enter Comment ID (e.g., 1)"
+                value="1"
+              />
+            </div>
+            <div class="form-group">
+              <label>
+                <i class="fas fa-link"></i>
+                Post ID
+              </label>
+              <input
+                type="text"
+                id="commentPostId"
+                placeholder="Associated Post ID"
+                value="1"
+              />
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1">
+              <label>
+                <i class="fas fa-comment"></i>
+                Comment Content
+              </label>
+              <textarea id="commentContent" placeholder="Enter comment content">
+Great post! Thanks for sharing this awesome content.</textarea
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="response-section">
+          <div class="response-header">
+            <h2>
+              <i class="fas fa-terminal"></i>
+              API Response
+            </h2>
+            <div class="response-actions">
+              <button
+                class="icon-btn"
+                onclick="copyResponse()"
+                title="Copy Response"
+              >
+                <i class="fas fa-copy"></i>
+              </button>
+              <button
+                class="icon-btn"
+                onclick="clearResponse()"
+                title="Clear Response"
+              >
+                <i class="fas fa-eraser"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing request...</p>
+          </div>
+
+          <div id="response">
+            // Awaiting API request... // Click any button above to test the API
+            endpoints // All responses will appear here with proper formatting
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <i
+        class="fas fa-check-circle"
+        style="color: var(--success); font-size: 1.5rem"
+      ></i>
+      <span id="toastMessage">Success!</span>
+    </div>
+
+    <script>
+      const baseUrl = "http://localhost:3000";
+      let totalRequests = 0;
+      let successRequests = 0;
+      let failedRequests = 0;
+
+      function updateStats() {
+        document.getElementById("totalRequests").textContent = totalRequests;
+        document.getElementById("successRequests").textContent =
+          successRequests;
+        document.getElementById("failedRequests").textContent = failedRequests;
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toastMessage");
+        toast.className = `toast ${type}`;
+        toastMessage.textContent = message;
+        toast.style.display = "flex";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 3000);
+      }
+
+      async function makeRequest(method, url, body = null) {
+        const loading = document.getElementById("loading");
+        const responseDiv = document.getElementById("response");
+
+        loading.style.display = "block";
+        responseDiv.style.display = "none";
+        totalRequests++;
+        updateStats();
+
+        const options = {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        if (body) options.body = JSON.stringify(body);
+
+        try {
+          const startTime = Date.now();
+          const response = await fetch(baseUrl + url, options);
+          const endTime = Date.now();
+          const duration = endTime - startTime;
+
+          const text = await response.text();
+
+          let formattedResponse;
+          try {
+            const json = JSON.parse(text);
+            formattedResponse = JSON.stringify(json, null, 2);
+          } catch {
+            formattedResponse = text;
+          }
+
+          const statusText = response.ok ? "✓ SUCCESS" : "✗ ERROR";
+          responseDiv.textContent = `// ${method} ${url}
+// Status: ${response.status} ${response.statusText} ${statusText}
+// Duration: ${duration}ms
+// Timestamp: ${new Date().toLocaleString()}
+
+${formattedResponse || "(Empty Response)"}`;
+
+          if (response.ok) {
+            successRequests++;
+            showToast(`${method} request successful!`, "success");
+          } else {
+            failedRequests++;
+            showToast(`Request failed with status ${response.status}`, "error");
+          }
+          updateStats();
+        } catch (error) {
+          responseDiv.textContent = `// REQUEST FAILED
+// Error: ${error.message}
+// Timestamp: ${new Date().toLocaleString()}
+
+Please check:
+1. Is the server running on ${baseUrl}?
+2. Is CORS configured correctly?
+3. Is the network connection stable?`;
+          failedRequests++;
+          updateStats();
+          showToast(`Error: ${error.message}`, "error");
+        } finally {
+          loading.style.display = "none";
+          responseDiv.style.display = "block";
+        }
+      }
+
+      function copyResponse() {
+        const response = document.getElementById("response").textContent;
+        navigator.clipboard.writeText(response).then(() => {
+          showToast("Response copied to clipboard!", "success");
+        });
+      }
+
+      function clearResponse() {
+        document.getElementById("response").textContent =
+          "// Response cleared\n// Ready for next request...";
+        showToast("Response cleared", "success");
+      }
+
+      // Posts
+      function getAllPosts() {
+        makeRequest("GET", "/api/posts");
+      }
+
+      function getPostById() {
+        const id = document.getElementById("postId").value;
+        if (!id) {
+          showToast("Please enter a Post ID", "error");
+          return;
+        }
+        makeRequest("GET", `/api/posts/${id}`);
+      }
+
+      function createPost() {
+        const title = document.getElementById("postTitle").value;
+        const content = document.getElementById("postContent").value;
+        if (!title || !content) {
+          showToast("Please fill in both title and content", "error");
+          return;
+        }
+        makeRequest("POST", "/api/posts", { title, content });
+      }
+
+      function updatePost() {
+        const id = document.getElementById("postId").value;
+        const title = document.getElementById("postTitle").value;
+        const content = document.getElementById("postContent").value;
+        if (!id || !title || !content) {
+          showToast("Please fill in ID, title and content", "error");
+          return;
+        }
+        makeRequest("PUT", `/api/posts/${id}`, { title, content });
+      }
+
+      function deletePost() {
+        const id = document.getElementById("postId").value;
+        if (!id) {
+          showToast("Please enter a Post ID", "error");
+          return;
+        }
+        if (confirm(`Are you sure you want to delete post ${id}?`)) {
+          makeRequest("DELETE", `/api/posts/${id}`);
+        }
+      }
+
+      // Comments
+      function getAllComments() {
+        makeRequest("GET", "/api/comments");
+      }
+
+      function getCommentById() {
+        const id = document.getElementById("commentId").value;
+        if (!id) {
+          showToast("Please enter a Comment ID", "error");
+          return;
+        }
+        makeRequest("GET", `/api/comments/${id}`);
+      }
+
+      function createComment() {
+        const postId = document.getElementById("commentPostId").value;
+        const content = document.getElementById("commentContent").value;
+        if (!postId || !content) {
+          showToast("Please fill in both Post ID and content", "error");
+          return;
+        }
+        makeRequest("POST", "/api/comments", { postId, content });
+      }
+
+      function updateComment() {
+        const id = document.getElementById("commentId").value;
+        const content = document.getElementById("commentContent").value;
+        if (!id || !content) {
+          showToast("Please fill in ID and content", "error");
+          return;
+        }
+        makeRequest("PUT", `/api/comments/${id}`, { content });
+      }
+
+      function deleteComment() {
+        const id = document.getElementById("commentId").value;
+        if (!id) {
+          showToast("Please enter a Comment ID", "error");
+          return;
+        }
+        if (confirm(`Are you sure you want to delete comment ${id}?`)) {
+          makeRequest("DELETE", `/api/comments/${id}`);
+        }
+      }
+    </script>
+  </body>
+</html>
