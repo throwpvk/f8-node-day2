@@ -10,6 +10,7 @@ app.use(
       "http://localhost:5173",
       "https://throwpvk.github.io",
       "http://127.0.0.1:5500",
+      "https://feed-6z7f.onrender.com",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     optionsSuccessStatus: 200,
