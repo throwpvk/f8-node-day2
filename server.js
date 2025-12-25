@@ -16,6 +16,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static("."));
 app.use("/api", appRouter);
 
 app.listen(port, () => {
